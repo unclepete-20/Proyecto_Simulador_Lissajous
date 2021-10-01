@@ -27,7 +27,7 @@ entre otros.
 
 """
 
-def lissajous(A, B, Delta):
+def lissajous(A, B, Delta): #Se pone en el menu.
     a = A
     b = B
     delta = Delta*(3.14)
@@ -54,17 +54,17 @@ def lissajous(A, B, Delta):
     #fig = plt.figure()
     #plt.figure().clear()
 
-def estatico(Vaceleracion, Vvertical, Vhorizontal):
-    vx = Vvertical
-    vy = Vhorizontal
+def estatico(Vaceleracion, Vvertical, Vhorizontal): #Se pone en el menu.
+    vy = Vvertical #Voltaje vertical (Se modifica)
+    vx = Vhorizontal #Voltaje horizontal (Se modifica)
+    va = Vaceleracion #Voltaje de aceleracion (Se modifica)
     carga = 1.6E-19
     masa = 9.1E-31
     distanciaplacas = 0.02
-    va = Vaceleracion
     distanciax = 0.1
 
     velocidadx = (((2 * carga * va) / masa) ** (1/2))
-    tiempo = distanciax/velocidadx
+    tiempo = distanciax / velocidadx
     acelaraciony = (carga * vy) / (masa * distanciaplacas)
     distanciay = (acelaraciony / 2)*(tiempo ** 2)
     angulo = math.degrees(math.atan(distanciay / distanciax))
@@ -95,5 +95,47 @@ def estatico(Vaceleracion, Vvertical, Vhorizontal):
     #fig = plt.figure()
     #plt.figure().clear()
 
+
+
+def menu():
+    verificar_salida = True
+
+    while(verificar_salida):
+
+        opcion_menu = 0
+
+        print("\n⌁⌁⌁⌁⌁⌁⌁⌁⌁⌁⌁⌁⌁⌁⌁⌁⌁⌁⌁⌁ CRT Simulator (Lissajous Figure Representation) ⌁⌁⌁⌁⌁⌁⌁⌁⌁⌁⌁⌁⌁⌁⌁⌁⌁⌁⌁⌁\n")
+
+        print("1. Simulate CRT behavior")
+        print("2. Salir\n")
+        
+        while(True):
+            
+            try:
+                opcion_menu = input("Ingrese una opción: ")
+                opcion_menu = int(opcion_menu)
+
+                if(opcion_menu == 1 or opcion_menu == 2):
+                    print("Aceptando su solicitud...\n")
+                    break
+                if(opcion_menu < 1 or opcion_menu > 2):
+                    print("¡Opcion invalida! Ingrese una de las opciones existentes :)\n")
+
+            except ValueError:
+                print("¡Solo se aceptan valores numericos! Ingrese de nuevo una opcion\n")
+            
+        if(opcion_menu == 1):
+            print("Mierda!")
+        elif(opcion_menu == 2):
+            print("\n¡Gracias por utilizar el simulador, regresa pronto!\n")
+            verificar_salida = False
+
+
+        
+
+
+
+
+menu()
 #lissajous(1, 3, (1/2))
-estatico(10, 100, 1)
+#estatico(10, 100, 1)
