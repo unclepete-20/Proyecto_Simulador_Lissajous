@@ -30,65 +30,42 @@ from tqdm import tqdm, trange
 import time
 
 
-def lissajous(A, B, Delta): #Función que dibuja las Lissajous.
-    a = A
-    b = B
-    delta = Delta*(3.14)
+def grafico(A, B, Delta, Vaceleracion, Vvertical, Vhorizontal): #Función que dibuja las Lissajous.
 
-    fig, ax = plt.subplots()
-    datosx, datosy = [], []
-    datos, = plt.plot([], [], 'ro')
-
-    def init():
-        ax.set_xlim(-5, 5)
-        ax.set_ylim(-5, 5)
-        return datos,
-
-    def update(frame):
-        datosx.append(np.sin((a*frame) + delta))
-        datosy.append(np.sin(b*frame))
-        datos.set_data(datosx, datosy)
-        return datos,
-
-    ani = FuncAnimation(fig, update, frames=np.linspace(2, 20, 100), init_func=init, blit=True)
-    #plt.text(0.08, 0.08, "Tiempo de ejecucion: " + str("HOLA"), fontsize=10, color='green')
-    plt.show()
-    plt.clf()
-    #fig = plt.figure()
-    #plt.figure().clear()
-
-def estatico(Vaceleracion, Vvertical, Vhorizontal): #Definición de variables estáticas y las modificables para el movimiento de electrones.
-    
     #Variables que modifica el usuario.
     vy = Vvertical #Voltaje vertical (Se modifica)
     vx = Vhorizontal #Voltaje horizontal (Se modifica)
     va = Vaceleracion #Voltaje de aceleracion (Se modifica)
     
     #Variables que no se modifican
-    carga = 1.6E-19
+    carga = -1.6E-19
     masa = 9.1E-31
     distanciaplacas = 0.02
-    distanciax = 0.1
+    ladoplaca = 0.1
 
-    velocidadx = (((2 * carga * va) / masa) ** (1/2))
-    tiempo = distanciax / velocidadx
+    velocidad = math.sqrt(abs((2 * carga * va) / masa))
+    tiempo = ladoplaca / velocidad
+
     acelaraciony = (carga * vy) / (masa * distanciaplacas)
-    distanciay = (acelaraciony / 2)*(tiempo ** 2)
-    angulo = math.degrees(math.atan(distanciay / distanciax))
-    angulo2 = math.degrees(math.atan(distanciay / distanciax))
+    acelaracionx = (carga * vx) / (masa * distanciaplacas)
 
-    opuesto1 = 0.02 * (math.degrees(math.atan(angulo)))
-    opuesto2 = 0.02 * (math.degrees(math.atan(angulo2)))
+    distanciay = (acelaraciony / 2) * (tiempo ** 2)
+    distanciax = (acelaracionx / 2) * (tiempo ** 2)
+
+    angulo = math.degrees(math.atan(distanciay / ladoplaca))
+    angulo2 = math.degrees(math.atan(distanciay / ladoplaca))
 
 
     fig, ax = plt.subplots()
-    x = opuesto1
-    y = opuesto2
+    x = distanciax
+    y = distanciay
     datos, = plt.plot([], [], 'ro')
 
+    print(x, y)
+
     def init():
-        ax.set_xlim(-15, 15)
-        ax.set_ylim(-15, 15)
+        ax.set_xlim(-0.25, 0.25)
+        ax.set_ylim(-0.25, 0.25)
         return datos,
 
     def update(frame):
@@ -98,9 +75,31 @@ def estatico(Vaceleracion, Vvertical, Vhorizontal): #Definición de variables es
     ani = FuncAnimation(fig, update, frames=np.linspace(2, 20, 100), init_func=init, blit=True)
     #plt.text(0.08, 0.08, "Tiempo de ejecucion: " + str("HOLA"), fontsize=10, color='green')
     plt.show()
-    plt.clf()
-    #fig = plt.figure()
-    #plt.figure().clear()
+    #plt.clf()
+
+    #Parte de Lissojous
+    a = A
+    b = B
+    delta = Delta*(3.14)
+
+    fig, ax = plt.subplots()
+    datosx, datosy = [], []
+    datos, = plt.plot([], [], 'ro')
+
+    def init():
+        ax.set_xlim(-0.25, 0.25)
+        ax.set_ylim(-0.25, 0.25)
+        return datos,
+
+    def update(frame):
+        datosx.append((distanciax)*(np.sin((a*frame) + delta)))
+        datosy.append((distanciay)*(np.sin(b*frame)))
+        datos.set_data(datosx, datosy)
+        return datos,
+
+    ani = FuncAnimation(fig, update, frames=np.linspace(2, 20, 100), init_func=init, blit=True)
+    #plt.text(0.08, 0.08, "Tiempo de ejecucion: " + str("HOLA"), fontsize=10, color='green')
+    plt.show()
 
 
 
@@ -147,11 +146,4 @@ def menu():
             verificar_salida = False
 
 
-        
-
-
-
-
-menu()
-#lissajous(1, 3, (1/2))
-#estatico(10, 100, 1)
+grafico(1, 3, (1/2), 100, 100, 100)
