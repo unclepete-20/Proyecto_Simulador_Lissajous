@@ -27,6 +27,7 @@ import matplotlib.pyplot as plt
 import math
 from matplotlib.animation import FuncAnimation
 from tqdm import tqdm, trange
+import time
 
 
 def lissajous(A, B, Delta): #Función que dibuja las Lissajous.
@@ -112,7 +113,7 @@ def menu():
 
         print("\n⌁⌁⌁⌁⌁⌁⌁⌁⌁⌁⌁⌁⌁⌁⌁⌁⌁⌁⌁⌁ CRT Simulator (Lissajous Figure Representation) ⌁⌁⌁⌁⌁⌁⌁⌁⌁⌁⌁⌁⌁⌁⌁⌁⌁⌁⌁⌁\n")
 
-        print("1. Simulate CRT behavior")
+        print("1. Simular comportamiento de un CRT")
         print("2. Salir\n")
         
         while(True):
@@ -125,6 +126,9 @@ def menu():
 
                 if(opcion_menu == 1 or opcion_menu == 2):
                     print("Aceptando su solicitud...\n")
+                    for i in tqdm([1,2,3,4,5]):
+                        time.sleep(0.3)
+                    print("\n\n")
                     break
                 if(opcion_menu < 1 or opcion_menu > 2):
                     print("¡Opcion invalida! Ingrese una de las opciones existentes :)\n")
