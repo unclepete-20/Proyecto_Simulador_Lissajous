@@ -138,7 +138,10 @@ def menu():
             
         #Se llevan a cabo las opciones seleccionados.
         if(opcion_menu == 1):
-            print("Mierda!")
+            A = input()
+            A = int(A)
+            B = input()
+            B = int(B)
         elif(opcion_menu == 2):
             print("\n¡Gracias por utilizar el simulador, regresa pronto!\n")
             verificar_salida = False
