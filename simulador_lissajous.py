@@ -1,8 +1,3 @@
-import numpy as np
-import matplotlib.pyplot as plt
-import math
-from matplotlib.animation import FuncAnimation
-
 """
 @author: Pedro Pablo Arriola Jimenez (20188)
 @author: Oscar Fernando López Barrios (20679)
@@ -26,8 +21,15 @@ como por ejemplo el potencial eléctrico, campo eléctrico, capacitancia,
 entre otros.
 
 """
+#Librerias importadas para poder utilizar funciones especiales que permitirán crear los Lissajous. 
+import numpy as np
+import matplotlib.pyplot as plt
+import math
+from matplotlib.animation import FuncAnimation
+from tqdm import tqdm, trange
 
-def lissajous(A, B, Delta): #Se pone en el menu.
+
+def lissajous(A, B, Delta): #Función que dibuja las Lissajous.
     a = A
     b = B
     delta = Delta*(3.14)
@@ -54,10 +56,14 @@ def lissajous(A, B, Delta): #Se pone en el menu.
     #fig = plt.figure()
     #plt.figure().clear()
 
-def estatico(Vaceleracion, Vvertical, Vhorizontal): #Se pone en el menu.
+def estatico(Vaceleracion, Vvertical, Vhorizontal): #Definición de variables estáticas y las modificables para el movimiento de electrones.
+    
+    #Variables que modifica el usuario.
     vy = Vvertical #Voltaje vertical (Se modifica)
     vx = Vhorizontal #Voltaje horizontal (Se modifica)
     va = Vaceleracion #Voltaje de aceleracion (Se modifica)
+    
+    #Variables que no se modifican
     carga = 1.6E-19
     masa = 9.1E-31
     distanciaplacas = 0.02
@@ -111,6 +117,8 @@ def menu():
         
         while(True):
             
+            
+            #Se manejan los errores en esta seccion.
             try:
                 opcion_menu = input("Ingrese una opción: ")
                 opcion_menu = int(opcion_menu)
@@ -124,6 +132,7 @@ def menu():
             except ValueError:
                 print("¡Solo se aceptan valores numericos! Ingrese de nuevo una opcion\n")
             
+        #Se llevan a cabo las opciones seleccionados.
         if(opcion_menu == 1):
             print("Mierda!")
         elif(opcion_menu == 2):
