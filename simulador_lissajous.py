@@ -1,5 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
+import math
 from matplotlib.animation import FuncAnimation
 
 """
@@ -26,25 +27,73 @@ entre otros.
 
 """
 
-a = 1
-b = 2
-delta = 3.14/2
+def lissajous(A, B, Delta):
+    a = A
+    b = B
+    delta = Delta*(3.14)
 
-fig, ax = plt.subplots()
-datosx, datosy = [], []
-datos, = plt.plot([], [], 'ro')
+    fig, ax = plt.subplots()
+    datosx, datosy = [], []
+    datos, = plt.plot([], [], 'ro')
 
-def init():
-    ax.set_xlim(-5, 5)
-    ax.set_ylim(-5, 5)
-    return datos,
+    def init():
+        ax.set_xlim(-5, 5)
+        ax.set_ylim(-5, 5)
+        return datos,
 
-def update(frame):
-    datosx.append(np.sin((a*frame) + delta))
-    datosy.append(np.sin(b*frame))
-    datos.set_data(datosx, datosy)
-    return datos,
+    def update(frame):
+        datosx.append(np.sin((a*frame) + delta))
+        datosy.append(np.sin(b*frame))
+        datos.set_data(datosx, datosy)
+        return datos,
 
-ani = FuncAnimation(fig, update, frames=np.linspace(2, 20, 100), init_func=init, blit=True)
-#plt.text(0.08, 0.08, "Tiempo de ejecucion: " + str("HOLA"), fontsize=10, color='green')
-plt.show()
+    ani = FuncAnimation(fig, update, frames=np.linspace(2, 20, 100), init_func=init, blit=True)
+    #plt.text(0.08, 0.08, "Tiempo de ejecucion: " + str("HOLA"), fontsize=10, color='green')
+    plt.show()
+    plt.clf()
+    #fig = plt.figure()
+    #plt.figure().clear()
+
+def estatico(Vaceleracion, Vvertical, Vhorizontal):
+    vx = Vvertical
+    vy = Vhorizontal
+    carga = 1.6E-19
+    masa = 9.1E-31
+    distanciaplacas = 0.02
+    va = Vaceleracion
+    distanciax = 0.1
+
+    velocidadx = (((2 * carga * va) / masa) ** (1/2))
+    tiempo = distanciax/velocidadx
+    acelaraciony = (carga * vy) / (masa * distanciaplacas)
+    distanciay = (acelaraciony / 2)*(tiempo ** 2)
+    angulo = math.degrees(math.atan(distanciay / distanciax))
+    angulo2 = math.degrees(math.atan(distanciay / distanciax))
+
+    opuesto1 = 0.02 * (math.degrees(math.atan(angulo)))
+    opuesto2 = 0.02 * (math.degrees(math.atan(angulo2)))
+
+
+    fig, ax = plt.subplots()
+    x = opuesto1
+    y = opuesto2
+    datos, = plt.plot([], [], 'ro')
+
+    def init():
+        ax.set_xlim(-15, 15)
+        ax.set_ylim(-15, 15)
+        return datos,
+
+    def update(frame):
+        datos.set_data(x, y)
+        return datos,
+
+    ani = FuncAnimation(fig, update, frames=np.linspace(2, 20, 100), init_func=init, blit=True)
+    #plt.text(0.08, 0.08, "Tiempo de ejecucion: " + str("HOLA"), fontsize=10, color='green')
+    plt.show()
+    plt.clf()
+    #fig = plt.figure()
+    #plt.figure().clear()
+
+#lissajous(1, 3, (1/2))
+estatico(10, 100, 1)
