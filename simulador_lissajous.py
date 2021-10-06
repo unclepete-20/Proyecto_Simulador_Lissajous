@@ -28,7 +28,17 @@ import math
 from matplotlib.animation import FuncAnimation
 from tqdm import tqdm, trange
 import time
+import tkinter as tk
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
+
+ventana = tk.Tk()
+ventana.geometry('700x700')
+ventana.wm_title('Simulacion del Comportamiento de un Tubo de Rayos Catodicos')
+ventana.minsize(width=700,height=700)
+
+frame = tk.Frame(ventana, bg='white', bd=3)
+frame.pack(expand=1, fill='both')
 
 def grafico(A, B, Delta, Vaceleracion, Vvertical, Vhorizontal): #Función que dibuja las Lissajous.
 
@@ -57,6 +67,7 @@ def grafico(A, B, Delta, Vaceleracion, Vvertical, Vhorizontal): #Función que di
 
 
     fig, ax = plt.subplots()
+    plt.title("Tubo de Rayos Catolicos", color='black', size=16,family="Arial")
     x = distanciax
     y = distanciay
     datos, = plt.plot([], [], 'ro')
@@ -74,8 +85,12 @@ def grafico(A, B, Delta, Vaceleracion, Vvertical, Vhorizontal): #Función que di
 
     ani = FuncAnimation(fig, update, frames=np.linspace(2, 20, 100), init_func=init, blit=True)
     #plt.text(0.08, 0.08, "Tiempo de ejecucion: " + str("HOLA"), fontsize=10, color='green')
-    plt.show()
-    #plt.clf()
+
+    ax = fig.add_subplot(111)
+    bar1 = FigureCanvasTkAgg(fig, root)
+    bar1.get_tk_widget().pack(side=tk.LEFT, fill=tk.BOTH)
+    
+    ax.set_title('Punto Estatico')
 
     #Parte de Lissojous
     a = A
@@ -99,11 +114,29 @@ def grafico(A, B, Delta, Vaceleracion, Vvertical, Vhorizontal): #Función que di
 
     ani = FuncAnimation(fig, update, frames=np.linspace(2, 20, 100), init_func=init, blit=True)
     #plt.text(0.08, 0.08, "Tiempo de ejecucion: " + str("HOLA"), fontsize=10, color='green')
-    plt.show()
+    #plt.show()
+
+ 
+  
 
 
+'''figure2 = plt.Figure(figsize=(5,4), dpi=100)
+ax2 = figure2.add_subplot(111)
+line2 = FigureCanvasTkAgg(figure2, root)
+line2.get_tk_widget().pack(side=tk.LEFT, fill=tk.BOTH)
+ax2.set_title('Year Vs. Unemployment Rate')
 
-def menu():
+figure3 = plt.Figure(figsize=(5,4), dpi=100)
+ax3 = figure3.add_subplot(111)
+scatter3 = FigureCanvasTkAgg(figure3, root) 
+scatter3.get_tk_widget().pack(side=tk.LEFT, fill=tk.BOTH)
+ax3.legend(['Stock_Index_Price']) 
+ax3.set_xlabel('Interest Rate')
+ax3.set_title('Interest Rate Vs. Stock Index Price')'''
+
+#root1.mainloop()
+
+'''def menu():
     verificar_salida = True
 
     while(verificar_salida):
@@ -143,7 +176,7 @@ def menu():
             B = int(B)
         elif(opcion_menu == 2):
             print("\n¡Gracias por utilizar el simulador, regresa pronto!\n")
-            verificar_salida = False
+            verificar_salida = False'''
 
 
 grafico(1, 3, (1/2), 100, 100, 100)
