@@ -182,16 +182,16 @@ def grafico(A, B, Delta, Vaceleracion, Vvertical, Vhorizontal): #Función que di
 
     # Function inputs
 
-    a_input = tkinter.Entry(master=ventana)
+    a_input = tkinter.Entry(master=ventana, justify='center')
     a_input.place(relx=0.6, rely=0.5, relwidth=0.1, anchor=tkinter.CENTER)
 
-    b_input = tkinter.Entry(master=ventana)
+    b_input = tkinter.Entry(master=ventana, justify='center')
     b_input.place(relx=0.75, rely=0.5, relwidth=0.1, anchor=tkinter.CENTER)
 
-    frequency_input = tkinter.Entry(master=ventana)
+    frequency_input = tkinter.Entry(master=ventana, justify='center')
     frequency_input.place(relx=0.225, rely=0.675, relwidth=0.1, anchor=tkinter.CENTER)
 
-    interval_input = tkinter.Entry(master=ventana)
+    interval_input = tkinter.Entry(master=ventana, justify='center')
     interval_input.place(relx=0.225, rely=0.780, relwidth=0.1, anchor=tkinter.CENTER)
 
     # Botones
