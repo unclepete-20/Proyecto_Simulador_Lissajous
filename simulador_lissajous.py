@@ -70,14 +70,14 @@ def grafico(A, B, Delta, Vaceleracion, Vvertical, Vhorizontal): #Función que di
 
 
     fig, ax = plt.subplots()
-    plt.title("Tubo de Rayos Catolicos", color='black', size=16,family="Arial")
+    plt.title("Tubo de Rayos Catodicos", color='black', size=16,family="Arial")
     x = distanciax
     y = distanciay
-    datos, = plt.plot([], [], 'ro')
+    #datos, = plt.plot([], [], 'ro')
 
     print(x, y)
 
-    def init():
+    '''def init():
         ax.set_xlim(-0.25, 0.25)
         ax.set_ylim(-0.25, 0.25)
         return datos,
@@ -86,14 +86,11 @@ def grafico(A, B, Delta, Vaceleracion, Vvertical, Vhorizontal): #Función que di
         datos.set_data(x, y)
         return datos,
 
-    #ani = FuncAnimation(fig, update, frames=np.linspace(2, 20, 100), init_func=init, blit=True)
-    plt.text(0.08, 0.08, "Tiempo de ejecucion: " + str("HOLA"), fontsize=10, color='green')
-
-    """ax = fig.add_subplot(111)
-    bar1 = FigureCanvasTkAgg(fig, root)
-    bar1.get_tk_widget().pack(side=tk.LEFT, fill=tk.BOTH)
+    ani = FuncAnimation(fig, update, frames=np.linspace(2, 20, 100), init_func=init, blit=True)'''
+    #plt.text(0.08, 0.08, "Tiempo de ejecucion: " + str("HOLA"), fontsize=10, color='green')
+    plt.plot(x, y)
+    plt.show()
     
-    ax.set_title('Punto Estatico')"""
 
     #Parte de Lissojous
     a = A
@@ -130,9 +127,12 @@ def grafico(A, B, Delta, Vaceleracion, Vvertical, Vhorizontal): #Función que di
     canvas = FigureCanvasTkAgg(fig, master = frame)
     canvas.get_tk_widget().pack(padx=5, pady=10, expand=1, fill='both', side=tkinter.RIGHT)
 
-    button_graficar = Button(frame, text='Graficar datos', width=15, bg='purple4', fg='white', command=iniciar).pack(pady=5,
-                                                                                                   side='left', expand=3)
+    #Labels
+    #label_A =
+    #label_B =
+    #label_Delta =
 
+    button_graficar = Button(frame, text='Graficar datos', width=15, bg='purple4', fg='white', command=iniciar).pack(pady=5,side='left', expand=3)
     ventana.mainloop()
 
 
