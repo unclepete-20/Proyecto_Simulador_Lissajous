@@ -44,7 +44,7 @@ ventana.minsize(width=700,height=700)
 frame = tk.Frame(ventana, bg='white', bd=3)
 frame.pack(expand=1, fill='both')"""
 
-def grafico(A, B, Delta, Vaceleracion, Vvertical, Vhorizontal): #Función que dibuja las Lissajous.
+def grafico(Vaceleracion, Vvertical, Vhorizontal): #Función que dibuja las Lissajous.
 
     #Variables que modifica el usuario.
     vy = Vvertical #Voltaje vertical (Se modifica)
@@ -91,9 +91,23 @@ def grafico(A, B, Delta, Vaceleracion, Vvertical, Vhorizontal): #Función que di
     #plt.text(0.08, 0.08, "Tiempo de ejecucion: " + str("HOLA"), fontsize=10, color='green')
 
     #Parte de Lissojous
-    a = A
-    b = B
-    delta = Delta*(3.14)
+    a = 1
+    b = 1
+
+    def lissajous_delta(value):
+        global delta
+
+        if(value == 1):
+            delta = 0*(math.pi)
+        elif(value == 2):
+            delta = (1/4)*(math.pi)
+        elif(value == 3):
+            delta = (1/2)*(math.pi)
+        elif(value == 4):
+            delta = (3/4)*(math.pi)
+        elif(value == 5):
+            delta = math.pi
+
 
     fig, ax = plt.subplots()
     datosx, datosy = [], []
@@ -139,6 +153,8 @@ def grafico(A, B, Delta, Vaceleracion, Vvertical, Vhorizontal): #Función que di
 
         canvas = FigureCanvasTkAgg(fig, master = frame)
         canvas.get_tk_widget().pack(padx=5, pady=10, expand=1, fill='both', side=tkinter.RIGHT)
+
+        print(delta)
 
         iniciar(canvas)
 
@@ -196,19 +212,19 @@ def grafico(A, B, Delta, Vaceleracion, Vvertical, Vhorizontal): #Función que di
 
     # Botones
 
-    delta_inputone = tkinter.Button(master=ventana, text='0')
+    delta_inputone = tkinter.Button(master=ventana, text='0', command=lissajous_delta(1))
     delta_inputone.place(relx=0.9, rely=0.5, relwidth=0.1, anchor=tkinter.CENTER)
 
-    delta_inputtwo = tkinter.Button(master=ventana, text='π/4')
+    delta_inputtwo = tkinter.Button(master=ventana, text='π/4', command=lissajous_delta(2))
     delta_inputtwo.place(relx=0.9, rely=0.60, relwidth=0.1, anchor=tkinter.CENTER)
 
-    delta_inputthree = tkinter.Button(master=ventana, text='π/2')
+    delta_inputthree = tkinter.Button(master=ventana, text='π/2', command=lissajous_delta(3))
     delta_inputthree.place(relx=0.9, rely=0.70, relwidth=0.1, anchor=tkinter.CENTER)
 
-    delta_inputfour = tkinter.Button(master=ventana, text='3π/4')
+    delta_inputfour = tkinter.Button(master=ventana, text='3π/4', command=lissajous_delta(4))
     delta_inputfour.place(relx=0.9, rely=0.80, relwidth=0.1, anchor=tkinter.CENTER)
 
-    delta_inputfive = tkinter.Button(master=ventana, text='π')
+    delta_inputfive = tkinter.Button(master=ventana, text='π', command=lissajous_delta(5))
     delta_inputfive.place(relx=0.9, rely=0.9, relwidth=0.1, anchor=tkinter.CENTER)
 
     # define font
@@ -219,9 +235,10 @@ def grafico(A, B, Delta, Vaceleracion, Vvertical, Vhorizontal): #Función que di
 
     graficar['font'] = myFont
 
+
     ventana.mainloop()
 
     #plt.text(0.08, 0.08, "Tiempo de ejecucion: " + str("HOLA"), fontsize=10, color='green')
     #plt.show()\
 
-grafico(1, 3, (1/2), 100, 100, 100)
+grafico(100, 100, 100)
