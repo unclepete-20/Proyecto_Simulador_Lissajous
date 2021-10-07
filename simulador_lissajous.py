@@ -21,24 +21,27 @@ como por ejemplo el potencial eléctrico, campo eléctrico, capacitancia,
 entre otros.
 
 """
-#Librerias importadas para poder utilizar funciones especiales que permitirán crear los Lissajous. 
+#Librerias importadas para poder utilizar funciones especiales que permitirán crear los Lissajous.
+import tkinter
+from logging import root
 import numpy as np
 import matplotlib.pyplot as plt
 import math
 from matplotlib.animation import FuncAnimation
 from tqdm import tqdm, trange
 import time
-import tkinter as tk
+# import tkinter as tk
+from tkinter import Tk, Frame, Button, Label, ttk
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
 
-ventana = tk.Tk()
+"""ventana = tk.Tk()
 ventana.geometry('700x700')
 ventana.wm_title('Simulacion del Comportamiento de un Tubo de Rayos Catodicos')
 ventana.minsize(width=700,height=700)
 
 frame = tk.Frame(ventana, bg='white', bd=3)
-frame.pack(expand=1, fill='both')
+frame.pack(expand=1, fill='both')"""
 
 def grafico(A, B, Delta, Vaceleracion, Vvertical, Vhorizontal): #Función que dibuja las Lissajous.
 
@@ -83,14 +86,14 @@ def grafico(A, B, Delta, Vaceleracion, Vvertical, Vhorizontal): #Función que di
         datos.set_data(x, y)
         return datos,
 
-    ani = FuncAnimation(fig, update, frames=np.linspace(2, 20, 100), init_func=init, blit=True)
-    #plt.text(0.08, 0.08, "Tiempo de ejecucion: " + str("HOLA"), fontsize=10, color='green')
+    #ani = FuncAnimation(fig, update, frames=np.linspace(2, 20, 100), init_func=init, blit=True)
+    plt.text(0.08, 0.08, "Tiempo de ejecucion: " + str("HOLA"), fontsize=10, color='green')
 
-    ax = fig.add_subplot(111)
+    """ax = fig.add_subplot(111)
     bar1 = FigureCanvasTkAgg(fig, root)
     bar1.get_tk_widget().pack(side=tk.LEFT, fill=tk.BOTH)
     
-    ax.set_title('Punto Estatico')
+    ax.set_title('Punto Estatico')"""
 
     #Parte de Lissojous
     a = A
@@ -112,9 +115,32 @@ def grafico(A, B, Delta, Vaceleracion, Vvertical, Vhorizontal): #Función que di
         datos.set_data(datosx, datosy)
         return datos,
 
-    ani = FuncAnimation(fig, update, frames=np.linspace(2, 20, 100), init_func=init, blit=True)
+    def iniciar():
+        ani = FuncAnimation(fig, update, frames=np.linspace(2, 20, 100), init_func=init, blit=True)
+        canvas.draw()
+
+    ventana = Tk()
+    ventana.geometry('1000x800')
+    ventana.wm_title('Proyecto Fisica 3')
+    ventana.minsize(width=1200, height=500)
+
+    frame = Frame(ventana, bg='white', bd=3)
+    frame.pack(expand=1, fill='both')
+
+    canvas = FigureCanvasTkAgg(fig, master = frame)
+    canvas.get_tk_widget().pack(padx=5, pady=10, expand=1, fill='both', side=tkinter.RIGHT)
+
+    button_graficar = Button(frame, text='Graficar datos', width=15, bg='purple4', fg='white', command=iniciar).pack(pady=5,
+                                                                                                   side='left', expand=3)
+
+    ventana.mainloop()
+
+
+
     #plt.text(0.08, 0.08, "Tiempo de ejecucion: " + str("HOLA"), fontsize=10, color='green')
     #plt.show()
+
+
 
  
   
