@@ -31,8 +31,9 @@ from matplotlib.animation import FuncAnimation
 from tqdm import tqdm, trange
 import time
 # import tkinter as tk
-from tkinter import Tk, Frame, Button, Label, ttk
+from tkinter import Tk, Frame, Button, Label, ttk, font
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+from functools import partial
 
 
 """ventana = tk.Tk()
@@ -70,14 +71,14 @@ def grafico(A, B, Delta, Vaceleracion, Vvertical, Vhorizontal): #Función que di
 
 
     fig, ax = plt.subplots()
-    plt.title("Tubo de Rayos Catodicos", color='black', size=16,family="Arial")
+    plt.title("Tubo de Rayos Catolicos", color='black', size=16,family="Arial")
     x = distanciax
     y = distanciay
-    #datos, = plt.plot([], [], 'ro')
+    datos, = plt.plot([], [], 'ro')
 
     print(x, y)
 
-    '''def init():
+    def init():
         ax.set_xlim(-0.25, 0.25)
         ax.set_ylim(-0.25, 0.25)
         return datos,
@@ -86,11 +87,14 @@ def grafico(A, B, Delta, Vaceleracion, Vvertical, Vhorizontal): #Función que di
         datos.set_data(x, y)
         return datos,
 
-    ani = FuncAnimation(fig, update, frames=np.linspace(2, 20, 100), init_func=init, blit=True)'''
-    #plt.text(0.08, 0.08, "Tiempo de ejecucion: " + str("HOLA"), fontsize=10, color='green')
-    plt.plot(x, y)
-    plt.show()
+    #ani = FuncAnimation(fig, update, frames=np.linspace(2, 20, 100), init_func=init, blit=True)
+    plt.text(0.08, 0.08, "Tiempo de ejecucion: " + str("HOLA"), fontsize=10, color='green')
+
+    """ax = fig.add_subplot(111)
+    bar1 = FigureCanvasTkAgg(fig, root)
+    bar1.get_tk_widget().pack(side=tk.LEFT, fill=tk.BOTH)
     
+    ax.set_title('Punto Estatico')"""
 
     #Parte de Lissojous
     a = A
@@ -112,97 +116,109 @@ def grafico(A, B, Delta, Vaceleracion, Vvertical, Vhorizontal): #Función que di
         datos.set_data(datosx, datosy)
         return datos,
 
-    def iniciar():
+    '''def iniciar():
         ani = FuncAnimation(fig, update, frames=np.linspace(2, 20, 100), init_func=init, blit=True)
-        canvas.draw()
+        canvas.draw()'''
+
+
 
     ventana = Tk()
-    ventana.geometry('1000x800')
-    ventana.wm_title('Proyecto Fisica 3')
-    ventana.minsize(width=1200, height=500)
+    ventana.geometry('750x600')
+    ventana.wm_title('Proyecto Fisica 3 / Pedro Arriola (20188) y Oscar López (20679)')
+    ventana.minsize(width=650, height=400)
 
-    frame = Frame(ventana, bg='white', bd=3)
-    frame.pack(expand=1, fill='both')
+    def opennewwindow(ventana):
+        # Toplevel object which will
+        # be treated as a new window
+        newwindow = tkinter.Toplevel(ventana)
 
-    canvas = FigureCanvasTkAgg(fig, master = frame)
-    canvas.get_tk_widget().pack(padx=5, pady=10, expand=1, fill='both', side=tkinter.RIGHT)
+        # sets the title of the
+        # Toplevel widget
+        newwindow.title("New Window")
 
-    #Labels
-    #label_A =
-    #label_B =
-    #label_Delta =
+        # sets the geometry of toplevel
+        newwindow.geometry("200x200")
 
-    button_graficar = Button(frame, text='Graficar datos', width=15, bg='purple4', fg='white', command=iniciar).pack(pady=5,side='left', expand=3)
+    # Títulos
+
+    static_title = tkinter.Label(master=ventana, text="⌁ PARÁMETROS MODIFICABLES ⌁", font=("Arial", 20), fg="#3892EA")
+    static_title.place(relx=0.50, rely=0.12, relwidth=1.1, relheight=0.125, anchor=tkinter.CENTER)
+
+    # Voltajes
+
+    x_voltage = tkinter.Label(master=ventana, text="Vx", font=("Arial", 14), fg="black")
+    x_voltage.place(relx=0.09375, rely=0.367, anchor=tkinter.CENTER)
+
+    y_voltage = tkinter.Label(master=ventana, text="Vy", font=("Arial", 14), fg="black")
+    y_voltage.place(relx=0.09375, rely=0.52, anchor=tkinter.CENTER)
+
+    # Sliders
+
+    x_slider = tkinter.Scale(master=ventana, from_=-8000, to=8000, orient=tkinter.HORIZONTAL)
+    x_slider.place(relx=0.3, rely=0.4, relwidth=0.25, relheight=0.15, anchor=tkinter.CENTER)
+
+    y_slider = tkinter.Scale(master=ventana, from_=-8000, to=8000, orient=tkinter.HORIZONTAL)
+    y_slider.place(relx=0.3, rely=0.55, relwidth=0.25, relheight=0.15, anchor=tkinter.CENTER)
+
+    # Parámetros
+
+    a_label = tkinter.Label(master=ventana, text="A", font=("Arial", 20), fg="black")
+    a_label.place(relx=0.6, rely=0.35, anchor=tkinter.CENTER)
+
+    b_label = tkinter.Label(master=ventana, text="B", font=("Arial", 20), fg="black")
+    b_label.place(relx=0.75, rely=0.35, anchor=tkinter.CENTER)
+
+    c_label = tkinter.Label(master=ventana, text="Delta\n(δ)", font=("Arial", 20), fg="black")
+    c_label.place(relx=0.9, rely=0.35, anchor=tkinter.CENTER)
+
+    frequency_label = tkinter.Label(master=ventana, text="Frecuencia", font=("Arial", 14), fg="black")
+    frequency_label.place(relx=0.09375, rely=0.675, anchor=tkinter.CENTER)
+
+    interval_label = tkinter.Label(master=ventana, text="Intervalo", font=("Arial", 14), fg="black")
+    interval_label.place(relx=0.09375, rely=0.780, anchor=tkinter.CENTER)
+
+    # Function inputs
+
+    a_input = tkinter.Entry(master=ventana)
+    a_input.place(relx=0.6, rely=0.5, relwidth=0.1, anchor=tkinter.CENTER)
+
+    b_input = tkinter.Entry(master=ventana)
+    b_input.place(relx=0.75, rely=0.5, relwidth=0.1, anchor=tkinter.CENTER)
+
+    frequency_input = tkinter.Entry(master=ventana)
+    frequency_input.place(relx=0.225, rely=0.675, relwidth=0.1, anchor=tkinter.CENTER)
+
+    interval_input = tkinter.Entry(master=ventana)
+    interval_input.place(relx=0.225, rely=0.780, relwidth=0.1, anchor=tkinter.CENTER)
+
+    # Botones
+
+    delta_inputone = tkinter.Button(master=ventana, text='0')
+    delta_inputone.place(relx=0.9, rely=0.5, relwidth=0.1, anchor=tkinter.CENTER)
+
+    delta_inputtwo = tkinter.Button(master=ventana, text='π/4')
+    delta_inputtwo.place(relx=0.9, rely=0.60, relwidth=0.1, anchor=tkinter.CENTER)
+
+    delta_inputthree = tkinter.Button(master=ventana, text='π/2')
+    delta_inputthree.place(relx=0.9, rely=0.70, relwidth=0.1, anchor=tkinter.CENTER)
+
+    delta_inputfour = tkinter.Button(master=ventana, text='3π/4')
+    delta_inputfour.place(relx=0.9, rely=0.80, relwidth=0.1, anchor=tkinter.CENTER)
+
+    delta_inputfive = tkinter.Button(master=ventana, text='π')
+    delta_inputfive.place(relx=0.9, rely=0.9, relwidth=0.1, anchor=tkinter.CENTER)
+
+    # define font
+    myFont = font.Font(family='Helvetica', size=5, weight='bold')
+
+    graficar = tkinter.Button(master=ventana, text='⌁ Graficar datos ⌁', bg='#3892EA')
+    graficar.place(relx=0.5, rely=0.9, relwidth=0.3, relheight=0.1, anchor=tkinter.CENTER, command=partial(opennewwindow, ventana))
+
+    graficar['font'] = myFont
+
     ventana.mainloop()
-
-
 
     #plt.text(0.08, 0.08, "Tiempo de ejecucion: " + str("HOLA"), fontsize=10, color='green')
     #plt.show()
-
-
-
- 
-  
-
-
-'''figure2 = plt.Figure(figsize=(5,4), dpi=100)
-ax2 = figure2.add_subplot(111)
-line2 = FigureCanvasTkAgg(figure2, root)
-line2.get_tk_widget().pack(side=tk.LEFT, fill=tk.BOTH)
-ax2.set_title('Year Vs. Unemployment Rate')
-
-figure3 = plt.Figure(figsize=(5,4), dpi=100)
-ax3 = figure3.add_subplot(111)
-scatter3 = FigureCanvasTkAgg(figure3, root) 
-scatter3.get_tk_widget().pack(side=tk.LEFT, fill=tk.BOTH)
-ax3.legend(['Stock_Index_Price']) 
-ax3.set_xlabel('Interest Rate')
-ax3.set_title('Interest Rate Vs. Stock Index Price')'''
-
-#root1.mainloop()
-
-'''def menu():
-    verificar_salida = True
-
-    while(verificar_salida):
-
-        opcion_menu = 0
-
-        print("\n⌁⌁⌁⌁⌁⌁⌁⌁⌁⌁⌁⌁⌁⌁⌁⌁⌁⌁⌁⌁ CRT Simulator (Lissajous Figure Representation) ⌁⌁⌁⌁⌁⌁⌁⌁⌁⌁⌁⌁⌁⌁⌁⌁⌁⌁⌁⌁\n")
-
-        print("1. Simular comportamiento de un CRT")
-        print("2. Salir\n")
-        
-        while(True):
-            
-            
-            #Se manejan los errores en esta seccion.
-            try:
-                opcion_menu = input("Ingrese una opción: ")
-                opcion_menu = int(opcion_menu)
-
-                if(opcion_menu == 1 or opcion_menu == 2):
-                    print("Aceptando su solicitud...\n")
-                    for i in tqdm([1,2,3,4,5]):
-                        time.sleep(0.3)
-                    print("\n\n")
-                    break
-                if(opcion_menu < 1 or opcion_menu > 2):
-                    print("¡Opcion invalida! Ingrese una de las opciones existentes :)\n")
-
-            except ValueError:
-                print("¡Solo se aceptan valores numericos! Ingrese de nuevo una opcion\n")
-            
-        #Se llevan a cabo las opciones seleccionados.
-        if(opcion_menu == 1):
-            A = input()
-            A = int(A)
-            B = input()
-            B = int(B)
-        elif(opcion_menu == 2):
-            print("\n¡Gracias por utilizar el simulador, regresa pronto!\n")
-            verificar_salida = False'''
-
 
 grafico(1, 3, (1/2), 100, 100, 100)
