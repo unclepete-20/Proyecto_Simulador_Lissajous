@@ -88,13 +88,7 @@ def grafico(A, B, Delta, Vaceleracion, Vvertical, Vhorizontal): #Función que di
         return datos,
 
     #ani = FuncAnimation(fig, update, frames=np.linspace(2, 20, 100), init_func=init, blit=True)
-    plt.text(0.08, 0.08, "Tiempo de ejecucion: " + str("HOLA"), fontsize=10, color='green')
-
-    """ax = fig.add_subplot(111)
-    bar1 = FigureCanvasTkAgg(fig, root)
-    bar1.get_tk_widget().pack(side=tk.LEFT, fill=tk.BOTH)
-    
-    ax.set_title('Punto Estatico')"""
+    #plt.text(0.08, 0.08, "Tiempo de ejecucion: " + str("HOLA"), fontsize=10, color='green')
 
     #Parte de Lissojous
     a = A
@@ -116,28 +110,37 @@ def grafico(A, B, Delta, Vaceleracion, Vvertical, Vhorizontal): #Función que di
         datos.set_data(datosx, datosy)
         return datos,
 
-    '''def iniciar():
+    def iniciar(canvas):
         ani = FuncAnimation(fig, update, frames=np.linspace(2, 20, 100), init_func=init, blit=True)
-        canvas.draw()'''
+        canvas.draw()
 
 
 
     ventana = Tk()
-    ventana.geometry('750x600')
+    ventana.geometry('1920x1080')
     ventana.wm_title('Proyecto Fisica 3 / Pedro Arriola (20188) y Oscar López (20679)')
-    ventana.minsize(width=650, height=400)
+    ventana.minsize(width=1920, height=1080)
 
     def opennewwindow(ventana):
         # Toplevel object which will
         # be treated as a new window
-        newwindow = tkinter.Toplevel(ventana)
+        graficas = tkinter.Toplevel(ventana)
 
         # sets the title of the
         # Toplevel widget
-        newwindow.title("New Window")
+        graficas.wm_title('Proyecto Fisica 3')
 
         # sets the geometry of toplevel
-        newwindow.geometry("200x200")
+        graficas.geometry('1920x1080')
+        graficas.minsize(width=1920, height=1080)
+
+        frame = Frame(graficas, bg='white', bd=3)
+        frame.pack(expand=1, fill='both')
+
+        canvas = FigureCanvasTkAgg(fig, master = frame)
+        canvas.get_tk_widget().pack(padx=5, pady=10, expand=1, fill='both', side=tkinter.RIGHT)
+
+        iniciar(canvas)
 
     # Títulos
 
@@ -211,14 +214,14 @@ def grafico(A, B, Delta, Vaceleracion, Vvertical, Vhorizontal): #Función que di
     # define font
     myFont = font.Font(family='Helvetica', size=5, weight='bold')
 
-    graficar = tkinter.Button(master=ventana, text='⌁ Graficar datos ⌁', bg='#3892EA')
-    graficar.place(relx=0.5, rely=0.9, relwidth=0.3, relheight=0.1, anchor=tkinter.CENTER, command=partial(opennewwindow, ventana))
+    graficar = tkinter.Button(master=ventana, text='⌁ Graficar datos ⌁', bg='#3892EA', command=partial(opennewwindow, ventana))
+    graficar.place(relx=0.5, rely=0.9, relwidth=0.3, relheight=0.1, anchor=tkinter.CENTER)
 
     graficar['font'] = myFont
 
     ventana.mainloop()
 
     #plt.text(0.08, 0.08, "Tiempo de ejecucion: " + str("HOLA"), fontsize=10, color='green')
-    #plt.show()
+    #plt.show()\
 
 grafico(1, 3, (1/2), 100, 100, 100)
