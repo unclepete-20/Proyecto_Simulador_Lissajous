@@ -66,8 +66,8 @@ def calculos(Vaceleracion, Vhorizontal, Vvertical):
     velocidad = math.sqrt(abs((2 * carga * va) / masa))
     tiempo = ladoplaca / velocidad
 
-    acelaraciony = abs(carga * vy) / (masa * distanciaplacas)
-    acelaracionx = abs(carga * vx) / (masa * distanciaplacas)
+    acelaraciony = (abs(carga) * vy) / (masa * distanciaplacas)
+    acelaracionx = (abs(carga) * vx) / (masa * distanciaplacas)
 
     distanciay = (acelaraciony / 2) * (tiempo ** 2)
     distanciax = (acelaracionx / 2) * (tiempo ** 2)
@@ -83,21 +83,22 @@ def grafico(distanciax, distanciay, angulox, anguloy, A, B, frecuencia, interval
     plt.close()
     plt.clf()
 
-    plt.title("Tubo de Rayos Catodicos", color='black', size=16,family="Arial")
+    vistah, vistav = angulo(angulox, anguloy, distanciax, distanciay)
+
+    plt.subplot(2, 2, 1)
+    plt.plot(vistav)
+    plt.title("Vista Superior")
+
+    plt.subplot(2, 2, 3)
+    plt.plot(vistah)
+    plt.title("Vista Lateral")
+    
     x = distanciax
     y = distanciay
 
-    plt.subplot(2, 2, 1)
-    plt.plot(x, y, 'o')
-    
-
-    vistah, vistav = angulo(angulox, anguloy, distanciax, distanciay)
-
     plt.subplot(2, 2, 2)
-    plt.plot(vistah)
-
-    plt.subplot(2, 2, 3)
-    plt.plot(vistav)
+    plt.plot(x, y, 'o')
+    plt.title("Particula Estatica")
 
     pi = (np.pi/2)
     t = np.arange(0, 20, 0.1)
@@ -105,6 +106,7 @@ def grafico(distanciax, distanciay, angulox, anguloy, A, B, frecuencia, interval
     y = ((distanciay)*(np.sin(B * t)))
     plt.subplot(2, 2, 4)
     plt.plot(x, y)
+    plt.title("Figura Lissajous")
 
     fig, ax = plt.subplots()
     datosx, datosy = [], []
