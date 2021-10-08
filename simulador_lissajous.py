@@ -33,11 +33,12 @@ import time
 # import tkinter as tk
 from tkinter import Tk, Frame, Button, Label, ttk, font
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
-from functools import partial
 
-global delta
+delta = 0
 
 def lissajous_delta(value):
+
+    global delta
 
     if(value == 1):
         delta = 0*(math.pi)
@@ -49,8 +50,6 @@ def lissajous_delta(value):
         delta = (3/4)*(math.pi)
     elif(value == 5):
         delta = math.pi
-
-    print("delta: ", delta)
 
 def calculos(Vaceleracion, Vhorizontal, Vvertical):
     #Variables que modifica el usuario.
@@ -102,8 +101,8 @@ def grafico(distanciax, distanciay, angulox, anguloy, A, B, frecuencia, interval
 
     pi = (np.pi/2)
     t = np.arange(0, 20, 0.1)
-    x = ((distanciax)*(np.sin((A * t) + (np.pi)/2)))
-    y = ((distanciay)*(np.sin(B * t)))
+    x = ((distanciax)*(np.cos((A * t))))
+    y = ((distanciay)*(np.cos(B * t) + delta))
     plt.subplot(2, 2, 4)
     plt.plot(x, y)
 
@@ -117,12 +116,14 @@ def grafico(distanciax, distanciay, angulox, anguloy, A, B, frecuencia, interval
         return datos,
 
     def update(frame):
-        datosx.append((distanciax)*(np.sin((A * frame) + (np.pi)/2)))
-        datosy.append((distanciay)*(np.sin(B * frame)))
+        datosx.append((distanciax)*(np.cos((A * frame))))
+        datosy.append((distanciay)*(np.cos(B * frame) + delta))
+        if(frecuencia == len(datosx)):
+            datosx.pop(0)
         datos.set_data(datosx, datosy)
         return datos,
 
-    ani = FuncAnimation(fig, update, frames=np.linspace(2, 20, 100), init_func=init, blit=True)
+    ani = FuncAnimation(fig, update, frames=np.linspace(0, 20, frames), interval=intervalo, init_func=init, blit=True)
 
     plt.show()
 
@@ -130,13 +131,13 @@ def grafico(distanciax, distanciay, angulox, anguloy, A, B, frecuencia, interval
 def angulo(anguloh, angulov, distanciax, distanciay):
 
     anguloh = abs(anguloh)
-    angulox = np.linspace(0, anguloh, 300)
-    desplamientoh = np.linspace(0, distanciax, 300)
+    angulox = np.linspace(0, anguloh, 250)
+    desplamientoh = np.linspace(0, distanciax, 250)
     desplazamientox = desplamientoh*angulox
 
     angulov = abs(angulov)
-    anguloy = np.linspace(0, angulov, 300)
-    desplamientov = np.linspace(0, distanciay, 300)
+    anguloy = np.linspace(0, angulov, 250)
+    desplamientov = np.linspace(0, distanciay, 250)
     desplazamientoy = desplamientov*anguloy
 
     return desplazamientox, desplazamientoy
@@ -215,19 +216,19 @@ interval_input.place(relx=0.225, rely=0.780, relwidth=0.1, anchor=tkinter.CENTER
 
 # Botones
 
-delta_inputone = tkinter.Button(master=ventana, text='0', command=lissajous_delta(1))
+delta_inputone = tkinter.Button(master=ventana, text='0', command=lambda: lissajous_delta(1))
 delta_inputone.place(relx=0.9, rely=0.5, relwidth=0.1, anchor=tkinter.CENTER)
 
-delta_inputtwo = tkinter.Button(master=ventana, text='π/4', command=lissajous_delta(2))
+delta_inputtwo = tkinter.Button(master=ventana, text='π/4', command=lambda: lissajous_delta(2))
 delta_inputtwo.place(relx=0.9, rely=0.60, relwidth=0.1, anchor=tkinter.CENTER)
 
-delta_inputthree = tkinter.Button(master=ventana, text='π/2', command=lissajous_delta(3))
+delta_inputthree = tkinter.Button(master=ventana, text='π/2', command=lambda: lissajous_delta(3))
 delta_inputthree.place(relx=0.9, rely=0.70, relwidth=0.1, anchor=tkinter.CENTER)
 
-delta_inputfour = tkinter.Button(master=ventana, text='3π/4', command=lissajous_delta(4))
+delta_inputfour = tkinter.Button(master=ventana, text='3π/4', command=lambda: lissajous_delta(4))
 delta_inputfour.place(relx=0.9, rely=0.80, relwidth=0.1, anchor=tkinter.CENTER)
 
-delta_inputfive = tkinter.Button(master=ventana, text='π', command=lissajous_delta(5))
+delta_inputfive = tkinter.Button(master=ventana, text='π', command=lambda: lissajous_delta(5))
 delta_inputfive.place(relx=0.9, rely=0.9, relwidth=0.1, anchor=tkinter.CENTER)
 
 # define font
