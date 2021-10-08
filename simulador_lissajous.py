@@ -87,11 +87,11 @@ def grafico(distanciax, distanciay, angulox, anguloy, A, B, frecuencia, interval
 
     plt.subplot(2, 2, 1)
     plt.plot(vistav)
-    plt.title("Vista Superior")
+    plt.title("Vista Lateral")
 
     plt.subplot(2, 2, 3)
     plt.plot(vistah)
-    plt.title("Vista Lateral")
+    plt.title("Vista Superior")
     
     x = distanciax
     y = distanciay
