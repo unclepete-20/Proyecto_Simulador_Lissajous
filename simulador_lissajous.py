@@ -35,9 +35,9 @@ from tkinter import Tk, Frame, Button, Label, ttk, font
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from functools import partial
 
-def lissajous_delta(value):
+global delta
 
-    global delta
+def lissajous_delta(value):
 
     if(value == 1):
         delta = 0*(math.pi)
@@ -50,11 +50,9 @@ def lissajous_delta(value):
     elif(value == 5):
         delta = math.pi
 
-    print(delta)
+    print("delta: ", delta)
 
-    return delta
-
-def calculos(Vaceleracion, Vvertical, Vhorizontal):
+def calculos(Vaceleracion, Vhorizontal, Vvertical):
     #Variables que modifica el usuario.
     vy = Vvertical #Voltaje vertical (Se modifica)
     vx = Vhorizontal #Voltaje horizontal (Se modifica)
@@ -69,96 +67,93 @@ def calculos(Vaceleracion, Vvertical, Vhorizontal):
     velocidad = math.sqrt(abs((2 * carga * va) / masa))
     tiempo = ladoplaca / velocidad
 
-    acelaraciony = (carga * vy) / (masa * distanciaplacas)
-    acelaracionx = (carga * vx) / (masa * distanciaplacas)
+    acelaraciony = abs(carga * vy) / (masa * distanciaplacas)
+    acelaracionx = abs(carga * vx) / (masa * distanciaplacas)
 
     distanciay = (acelaraciony / 2) * (tiempo ** 2)
     distanciax = (acelaracionx / 2) * (tiempo ** 2)
 
-    angulo = math.degrees(math.atan(distanciay / ladoplaca))
-    angulo2 = math.degrees(math.atan(distanciay / ladoplaca))
+    angulox = math.degrees(math.atan(distanciax / ladoplaca))
+    anguloy = math.degrees(math.atan(distanciay / ladoplaca))
 
-    return distanciax, distanciay
+    return distanciax, distanciay, angulox, anguloy
 
 
-def grafico(distanciax, distanciay): #Función que dibuja las Lissajous.
+def grafico(distanciax, distanciay, angulox, anguloy, A, B, frecuencia, intervalo): #Función que dibuja las Lissajous.
+    
+    plt.close()
+    plt.clf()
 
-    fig, ax = plt.subplots()
-    plt.title("Tubo de Rayos Catolicos", color='black', size=16,family="Arial")
+    plt.title("Tubo de Rayos Catodicos", color='black', size=16,family="Arial")
     x = distanciax
     y = distanciay
-    datos, = plt.plot([], [], 'ro')
-    fig.add_subplot(221)
 
-    print(x, y)
+    plt.subplot(2, 2, 1)
+    plt.plot(x, y, 'o')
+    
 
-    def init():
-        ax.set_xlim(-0.25, 0.25)
-        ax.set_ylim(-0.25, 0.25)
-        return datos,
+    vistah, vistav = angulo(angulox, anguloy, distanciax, distanciay)
 
-    def update(frame):
-        datos.set_data(x, y)
-        return datos,
+    plt.subplot(2, 2, 2)
+    plt.plot(vistah)
 
-    ani1 = FuncAnimation(fig, update, frames=np.linspace(2, 20, 100), init_func=init, blit=True)
+    plt.subplot(2, 2, 3)
+    plt.plot(vistav)
 
-    #Parte de Lissojous
-    a = 1
-    b = 1
+    pi = (np.pi/2)
+    t = np.arange(0, 20, 0.1)
+    x = ((distanciax)*(np.sin((A * t) + (np.pi)/2)))
+    y = ((distanciay)*(np.sin(B * t)))
+    plt.subplot(2, 2, 4)
+    plt.plot(x, y)
 
     fig, ax = plt.subplots()
     datosx, datosy = [], []
     datos, = plt.plot([], [], 'ro')
-    fig.add_subplot(222)
 
     def init():
-        ax.set_xlim(-0.25, 0.25)
-        ax.set_ylim(-0.25, 0.25)
+        ax.set_xlim(-0.5, 0.5)
+        ax.set_ylim(-0.5, 0.5)
         return datos,
 
     def update(frame):
-        datosx.append((distanciax)*(np.sin((a*frame) + delta)))
-        datosy.append((distanciay)*(np.sin(b*frame)))
+        datosx.append((distanciax)*(np.sin((A * frame) + (np.pi)/2)))
+        datosy.append((distanciay)*(np.sin(B * frame)))
         datos.set_data(datosx, datosy)
         return datos,
 
-    ani2 = FuncAnimation(fig, update, frames=np.linspace(2, 20, 100), init_func=init, blit=True)
+    ani = FuncAnimation(fig, update, frames=np.linspace(2, 20, 100), init_func=init, blit=True)
 
-    return fig, ani1, ani2
-
-def iniciar(canvas, ani1, ani2):
-    animacion1 = ani1
-    animacion2 = ani2
-    canvas.draw()
+    plt.show()
 
 
-def opennewwindow(ventana, Va, Vx, Vy):
-    # Toplevel object which will
-    # be treated as a new window
-    graficas = tkinter.Toplevel(ventana)
+def angulo(anguloh, angulov, distanciax, distanciay):
 
-    # sets the title of the
-    # Toplevel widget
-    graficas.wm_title('Proyecto Fisica 3')
+    anguloh = abs(anguloh)
+    angulox = np.linspace(0, anguloh, 300)
+    desplamientoh = np.linspace(0, distanciax, 300)
+    desplazamientox = desplamientoh*angulox
 
-    # sets the geometry of toplevel
-    graficas.geometry('1920x1080')
-    graficas.minsize(width=1920, height=1080)
+    angulov = abs(angulov)
+    anguloy = np.linspace(0, angulov, 300)
+    desplamientov = np.linspace(0, distanciay, 300)
+    desplazamientoy = desplamientov*anguloy
 
-    frame = Frame(graficas, bg='white', bd=3)
-    frame.pack(expand=1, fill='both')
+    return desplazamientox, desplazamientoy
 
-    canvas = FigureCanvasTkAgg(grafico(calculos(Va, Vx, Vy)), master = frame)
-    canvas.get_tk_widget().pack(padx=5, pady=10, expand=1, fill='both', side=tkinter.RIGHT)
 
-    iniciar(canvas)
+def opennewwindow(ventana, Va, Vx, Vy, A, B, Frecuencia, Intervalo):
+    
+    dx, dy, ax, ay = calculos(Va, Vx, Vy)
+
+    grafico(dx, dy, ax, ay, A, B, Frecuencia, Intervalo)
+    
 
 
 ventana = Tk()
-ventana.geometry('1920x1080')
+ventana.geometry('1080x720')
 ventana.wm_title('Proyecto Fisica 3 / Pedro Arriola (20188) y Oscar López (20679)')
-ventana.minsize(width=1920, height=1080)
+ventana.minsize(width=1080, height=720)
 
 # Títulos
 
@@ -178,13 +173,13 @@ a_voltage.place(relx=0.09375, rely=0.55, anchor=tkinter.CENTER)
 
 # Sliders
 
-x_slider = tkinter.Scale(master=ventana, from_=-8000, to=8000, orient=tkinter.HORIZONTAL)
+x_slider = tkinter.Scale(master=ventana, from_=-1000, to=1000, orient=tkinter.HORIZONTAL)
 x_slider.place(relx=0.3, rely=0.4, relwidth=0.25, relheight=0.15, anchor=tkinter.CENTER)
 
-y_slider = tkinter.Scale(master=ventana, from_=-8000, to=8000, orient=tkinter.HORIZONTAL)
+y_slider = tkinter.Scale(master=ventana, from_=-1000, to=1000, orient=tkinter.HORIZONTAL)
 y_slider.place(relx=0.3, rely=0.5, relwidth=0.25, relheight=0.15, anchor=tkinter.CENTER)
 
-a_slider = tkinter.Scale(master=ventana, from_=-8000, to=8000, orient=tkinter.HORIZONTAL)
+a_slider = tkinter.Scale(master=ventana, from_=-1000, to=1000, orient=tkinter.HORIZONTAL)
 a_slider.place(relx=0.3, rely=0.6, relwidth=0.25, relheight=0.15, anchor=tkinter.CENTER)
 
 # Parámetros
@@ -238,11 +233,7 @@ delta_inputfive.place(relx=0.9, rely=0.9, relwidth=0.1, anchor=tkinter.CENTER)
 # define font
 myFont = font.Font(family='Helvetica', size=5, weight='bold')
 
-print("valor Va", a_slider.get())
-print("valor Vx", x_slider.get())
-print("valor Vy", y_slider.get())
-
-graficar = tkinter.Button(master=ventana, text='⌁ Graficar datos ⌁', bg='#3892EA', command=partial(opennewwindow, ventana, a_slider.get(), x_slider.get(), y_slider.get()))
+graficar = tkinter.Button(master=ventana, text='⌁ Graficar datos ⌁', bg='#3892EA', command=lambda: opennewwindow (ventana, a_slider.get(), x_slider.get(), y_slider.get(), float(a_input.get()), float(b_input.get()), frequency_input.get(), interval_input.get()))
 graficar.place(relx=0.5, rely=0.9, relwidth=0.3, relheight=0.1, anchor=tkinter.CENTER)
 
 graficar['font'] = myFont
