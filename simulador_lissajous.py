@@ -133,7 +133,7 @@ def iniciar(canvas, ani1, ani2):
     canvas.draw()
 
 
-def opennewwindow(ventana):
+def opennewwindow(ventana, Va, Vx, Vy):
     # Toplevel object which will
     # be treated as a new window
     graficas = tkinter.Toplevel(ventana)
@@ -149,7 +149,7 @@ def opennewwindow(ventana):
     frame = Frame(graficas, bg='white', bd=3)
     frame.pack(expand=1, fill='both')
 
-    canvas = FigureCanvasTkAgg(grafico(), master = frame)
+    canvas = FigureCanvasTkAgg(grafico(calculos(Va, Vx, Vy)), master = frame)
     canvas.get_tk_widget().pack(padx=5, pady=10, expand=1, fill='both', side=tkinter.RIGHT)
 
     iniciar(canvas)
@@ -171,7 +171,10 @@ x_voltage = tkinter.Label(master=ventana, text="Vx", font=("Arial", 14), fg="bla
 x_voltage.place(relx=0.09375, rely=0.367, anchor=tkinter.CENTER)
 
 y_voltage = tkinter.Label(master=ventana, text="Vy", font=("Arial", 14), fg="black")
-y_voltage.place(relx=0.09375, rely=0.52, anchor=tkinter.CENTER)
+y_voltage.place(relx=0.09375, rely=0.46, anchor=tkinter.CENTER)
+
+a_voltage = tkinter.Label(master=ventana, text="Va", font=("Arial", 14), fg="black")
+a_voltage.place(relx=0.09375, rely=0.55, anchor=tkinter.CENTER)
 
 # Sliders
 
@@ -179,7 +182,10 @@ x_slider = tkinter.Scale(master=ventana, from_=-8000, to=8000, orient=tkinter.HO
 x_slider.place(relx=0.3, rely=0.4, relwidth=0.25, relheight=0.15, anchor=tkinter.CENTER)
 
 y_slider = tkinter.Scale(master=ventana, from_=-8000, to=8000, orient=tkinter.HORIZONTAL)
-y_slider.place(relx=0.3, rely=0.55, relwidth=0.25, relheight=0.15, anchor=tkinter.CENTER)
+y_slider.place(relx=0.3, rely=0.5, relwidth=0.25, relheight=0.15, anchor=tkinter.CENTER)
+
+a_slider = tkinter.Scale(master=ventana, from_=-8000, to=8000, orient=tkinter.HORIZONTAL)
+a_slider.place(relx=0.3, rely=0.6, relwidth=0.25, relheight=0.15, anchor=tkinter.CENTER)
 
 # Parámetros
 
@@ -232,7 +238,11 @@ delta_inputfive.place(relx=0.9, rely=0.9, relwidth=0.1, anchor=tkinter.CENTER)
 # define font
 myFont = font.Font(family='Helvetica', size=5, weight='bold')
 
-graficar = tkinter.Button(master=ventana, text='⌁ Graficar datos ⌁', bg='#3892EA', command=partial(opennewwindow, ventana))
+print("valor Va", a_slider.get())
+print("valor Vx", x_slider.get())
+print("valor Vy", y_slider.get())
+
+graficar = tkinter.Button(master=ventana, text='⌁ Graficar datos ⌁', bg='#3892EA', command=partial(opennewwindow, ventana, a_slider.get(), x_slider.get(), y_slider.get()))
 graficar.place(relx=0.5, rely=0.9, relwidth=0.3, relheight=0.1, anchor=tkinter.CENTER)
 
 graficar['font'] = myFont
