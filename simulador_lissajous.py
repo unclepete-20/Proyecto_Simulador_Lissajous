@@ -28,7 +28,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 import math
 from matplotlib.animation import FuncAnimation
-from tqdm import tqdm, trange
 import time
 # import tkinter as tk
 from tkinter import Tk, Frame, Button, Label, ttk, font
