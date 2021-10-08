@@ -146,6 +146,11 @@ def opennewwindow(ventana, Va, Vx, Vy, A, B, Frecuencia, Intervalo):
     dx, dy, ax, ay = calculos(Va, Vx, Vy)
 
     grafico(dx, dy, ax, ay, A, B, Frecuencia, Intervalo)
+
+def closeprogram():
+    plt.close()
+    plt.clf()
+    ventana.destroy()
     
 
 
@@ -237,5 +242,7 @@ graficar.place(relx=0.5, rely=0.9, relwidth=0.3, relheight=0.1, anchor=tkinter.C
 
 graficar['font'] = myFont
 
+close = tkinter.Button(master=ventana, text='Cerrar Programa', command=lambda: closeprogram())
+close.place(relx=0.9, rely=0.1, relwidth=0.1, anchor=tkinter.CENTER)
 
 ventana.mainloop()
