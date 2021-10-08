@@ -28,6 +28,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import math
 from matplotlib.animation import FuncAnimation
+from tqdm import tqdm, trange
 import time
 # import tkinter as tk
 from tkinter import Tk, Frame, Button, Label, ttk, font
@@ -146,12 +147,11 @@ def opennewwindow(ventana, Va, Vx, Vy, A, B, Frecuencia, Intervalo):
 
     grafico(dx, dy, ax, ay, A, B, Frecuencia, Intervalo)
 
+    
 def closeprogram():
     plt.close()
     plt.clf()
     ventana.destroy()
-    
-
 
 ventana = Tk()
 ventana.geometry('1080x720')
