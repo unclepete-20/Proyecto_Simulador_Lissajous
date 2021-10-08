@@ -101,8 +101,8 @@ def grafico(distanciax, distanciay, angulox, anguloy, A, B, frecuencia, interval
 
     pi = (np.pi/2)
     t = np.arange(0, 20, 0.1)
-    x = ((distanciax)*(np.cos((A * t))))
-    y = ((distanciay)*(np.cos(B * t) + delta))
+    x = ((distanciax)*(np.sin((A * t) + delta)))
+    y = ((distanciay)*(np.sin(B * t)))
     plt.subplot(2, 2, 4)
     plt.plot(x, y)
 
@@ -116,14 +116,12 @@ def grafico(distanciax, distanciay, angulox, anguloy, A, B, frecuencia, interval
         return datos,
 
     def update(frame):
-        datosx.append((distanciax)*(np.cos((A * frame))))
-        datosy.append((distanciay)*(np.cos(B * frame) + delta))
-        if(frecuencia == len(datosx)):
-            datosx.pop(0)
+        datosx.append((distanciax)*(np.sin((A * frame) + delta)))
+        datosy.append((distanciay)*(np.sin(B * frame)))
         datos.set_data(datosx, datosy)
         return datos,
 
-    ani = FuncAnimation(fig, update, frames=np.linspace(0, 20, frames), interval=intervalo, init_func=init, blit=True)
+    ani = FuncAnimation(fig, update, frames=np.linspace(0, 20, frecuencia), interval=intervalo, init_func=init, blit=True)
 
     plt.show()
 
@@ -234,7 +232,7 @@ delta_inputfive.place(relx=0.9, rely=0.9, relwidth=0.1, anchor=tkinter.CENTER)
 # define font
 myFont = font.Font(family='Helvetica', size=5, weight='bold')
 
-graficar = tkinter.Button(master=ventana, text='⌁ Graficar datos ⌁', bg='#3892EA', command=lambda: opennewwindow (ventana, a_slider.get(), x_slider.get(), y_slider.get(), float(a_input.get()), float(b_input.get()), frequency_input.get(), interval_input.get()))
+graficar = tkinter.Button(master=ventana, text='⌁ Graficar datos ⌁', bg='#3892EA', command=lambda: opennewwindow (ventana, a_slider.get(), x_slider.get(), y_slider.get(), float(a_input.get()), float(b_input.get()), int(frequency_input.get()), int(interval_input.get())))
 graficar.place(relx=0.5, rely=0.9, relwidth=0.3, relheight=0.1, anchor=tkinter.CENTER)
 
 graficar['font'] = myFont
